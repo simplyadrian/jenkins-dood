@@ -2,8 +2,6 @@
 
 # Jenkins with DooD (Docker outside of Docker)
 
----
-
 A [Jenkins container](https://registry.hub.docker.com/_/jenkins/) capable of using [Docker](http://docker.com), so you can Docker while you Docker.
 
 * [How to use it](#how-to-use-it)

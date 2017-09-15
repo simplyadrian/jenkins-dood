@@ -8,20 +8,32 @@
 # * http://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci
 ###############################################################################
 
-FROM mgage/ecs-jenkins
+FROM jenkinsci/jenkins:2.78
 MAINTAINER the internet
 
-ENV docker_version 1.11.2
+ENV docker_version 17.06.0
 # Install necessary packages
 USER root
 ADD ./git-lfs_1.4.4_amd64.deb /git-lfs_1.4.4_amd64.deb
 RUN apt-get update &&\
-    apt-get install -y sudo &&\
+    apt-get upgrade -y -o DPkg::Options::=--force-confold &&\
+    apt-get install -qq -y --no-install-recommends --no-install-suggests \
+	                apt-transport-https \
+                    ca-certificates \
+                    gnupg2 \
+                    software-properties-common \
+                    git \
+	                sudo &&\
     dpkg -i /git-lfs_1.4.4_amd64.deb &&\
     apt-get install -f &&\
-    curl -sSL https://get.docker.com/ | sh &&\
-    apt-get purge -y docker-engine &&\
-    apt-get install docker-engine=${docker_version}-0~jessie &&\
+	curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - &&\
+    add-apt-repository \
+    "deb [arch=amd64] https://download.docker.com/linux/debian \
+    $(lsb_release -cs) \
+    stable" &&\
+	apt-get update &&\
+    apt-get -y install docker-ce=${docker_version}~ce-0~debian &&\
+    apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
 
 # Install initial plugins

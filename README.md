@@ -19,18 +19,14 @@ This Docker container is highly based on the one explained at the [article by Ad
 
 ## <a name="how-to-use-it"></a> How to use it
 
-### If you wish to obtain the image, you just have to ...
+### Build it
 
 ```bash
-docker pull axltxl/jenkins-dood
-```
-
-### However, if you wish to build it instead ...
-
-```bash
-git clone https://github.com/axltxl/docker-jenkins-dood.git
+git clone https://github.com/intuitivetechnologygroup/jenkins-dood.git
 cd jenkins-dood
 docker build -t jenkins-dood .
+# or use make
+make build
 ```
 
 #### You can optionally set `docker-engine` version at build time through the use of the `docker_version` build argument, like so:
@@ -49,11 +45,30 @@ docker-compose up
 ### Now, time to have fun with it...
 
 ```bash
+docker run -d -v /var/run/docker.sock:/var/run/docker.sock -p 8080:8080 -t jenkins-dood
+# or use make
+make run
+```
+
+### If you want to have fun with permissions...
+
+```bash
 docker run -d -v /var/run/docker.sock:/var/run/docker.sock \
               -v /path/to/your/jenkins/home:/var/jenkins_home \
               -p 8080:8080 \
-              axltxl/jenkins-dood
+              jenkins-dood
 ```
+
+### Use it...
+
+Open your browser and go to `localhost:8080`
+
+#### Get initial admin password
+
+```bash
+make init-password
+```
+
 
 ### <a name="advantages"></a> Advantages
 

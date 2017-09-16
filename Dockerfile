@@ -39,6 +39,6 @@ RUN apt-get update &&\
 # Install initial plugins
 USER jenkins
 COPY plugins.txt /usr/share/jenkins/plugins.txt
-RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
+RUN cat /usr/share/jenkins/plugins.txt | /usr/local/bin/install-plugins.sh
 RUN mkdir "$JENKINS_HOME"/.ssh && ssh-keyscan -t rsa github.com >> "$JENKINS_HOME"/.ssh/known_hosts
 CMD /usr/local/bin/jenkins.sh

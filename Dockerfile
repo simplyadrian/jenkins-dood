@@ -54,16 +54,13 @@ RUN cat /usr/share/jenkins/plugins.txt | /usr/local/bin/install-plugins.sh
 # add some default jobs that we want to ship with all jenkins servers
 ADD jobs /usr/share/jenkins/ref/jobs
 
-# add credstash usage so that we can salt our config files with a credstash secret
-ADD credstash.sh /credstash.sh
-
 # fixup the backup job to be specific to the product we start with
 ADD fixup_backup.sh /fixup_backup.sh
 
 # add github keys to known hosts
 RUN mkdir "$JENKINS_HOME"/.ssh && ssh-keyscan -t rsa github.com >> "$JENKINS_HOME"/.ssh/known_hosts
 
-USER root
+USER jenkins
 
 #add entrypoint script into the container
 ADD uidgid_volume_entry.sh /tmp/uidgid_volume_entry.sh

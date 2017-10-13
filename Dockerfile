@@ -37,9 +37,34 @@ RUN apt-get update &&\
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
 
+# install awscli
+RUN pip install \
+    awscli &&\
+
 # Install initial plugins
 USER jenkins
+
+# restore job
+ADD restore.sh /restore.sh
+
+# add some plugins at boot time
 COPY plugins.txt /usr/share/jenkins/plugins.txt
 RUN cat /usr/share/jenkins/plugins.txt | /usr/local/bin/install-plugins.sh
+
+# add some default jobs that we want to ship with all jenkins servers
+ADD jobs /usr/share/jenkins/ref/jobs
+
+# add credstash usage so that we can salt our config files with a credstash secret
+ADD credstash.sh /credstash.sh
+
+# fixup the backup job to be specific to the product we start with
+ADD fixup_backup.sh /fixup_backup.sh
+
+# add github keys to known hosts
 RUN mkdir "$JENKINS_HOME"/.ssh && ssh-keyscan -t rsa github.com >> "$JENKINS_HOME"/.ssh/known_hosts
-CMD /usr/local/bin/jenkins.sh
+
+USER root
+
+#add entrypoint script into the container
+ADD uidgid_volume_entry.sh /tmp/uidgid_volume_entry.sh
+ENTRYPOINT ["/tmp/uidgid_volume_entry.sh"]

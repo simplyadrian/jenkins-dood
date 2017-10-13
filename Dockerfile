@@ -33,6 +33,7 @@ RUN apt-get update &&\
     stable" &&\
 	apt-get update &&\
     apt-get -y install docker-ce=${docker_version}~ce-0~debian &&\
+    apt-get install -y python-pip python-virtualenv &&\
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
 

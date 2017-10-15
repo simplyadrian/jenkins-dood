@@ -8,10 +8,14 @@
 # * http://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci
 ###############################################################################
 
-FROM jenkinsci/jenkins:2.78
+FROM jenkinsci/jenkins:2.84
 MAINTAINER the internet
 
+ENV PRODUCT test
+ENV ROOT_BUCKET backups
+ENV REGION us-west-1
 ENV docker_version 17.06.0
+
 # Install necessary packages
 USER root
 ADD ./git-lfs_1.4.4_amd64.deb /git-lfs_1.4.4_amd64.deb
@@ -37,9 +41,35 @@ RUN apt-get update &&\
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
 
-# Install initial plugins
+# install awscli
+RUN pip install awscli
+
+# restore job
+ADD restore.sh /restore.sh
+
+# add executable bits to entrypoint script
+RUN chmod +x /restore.sh
+
+# add some default jobs that we want to ship with all jenkins servers
+ADD jobs /usr/share/jenkins/ref/jobs
+
+# fixup the backup job to be specific to the product we start with
+ADD fixup_backup.sh /fixup_backup.sh
+
+# add executable bits to entrypoint script
+RUN chmod +x /fixup_backup.sh
+
+#add entrypoint script into the container
+ADD uidgid_volume_entry.sh /tmp/uidgid_volume_entry.sh
+RUN chmod +x /tmp/uidgid_volume_entry.sh
+
 USER jenkins
+# add some plugins at boot time
 COPY plugins.txt /usr/share/jenkins/plugins.txt
 RUN cat /usr/share/jenkins/plugins.txt | /usr/local/bin/install-plugins.sh
+
+# add github keys to known hosts
 RUN mkdir "$JENKINS_HOME"/.ssh && ssh-keyscan -t rsa github.com >> "$JENKINS_HOME"/.ssh/known_hosts
-CMD /usr/local/bin/jenkins.sh
+
+USER root
+ENTRYPOINT ["/tmp/uidgid_volume_entry.sh"]

@@ -23,11 +23,11 @@ This Docker container is highly based on the one explained at the [article by Ad
 
 ### Environment Variables
 
-* ROOT_BUCKET: the s3 bucket that you wish to store your archives too.
-* PRODUCT: the project name or product name. to set distinct locations for
+* `ROOT_BUCKET`: the s3 bucket that you wish to store your archives too.
+* `PRODUCT`: the project name or product name. to set distinct locations for
   backing up multiple jenkins servers to the same location (s3 bucket subfolder).
-* REGION: the region in AWS that the s3 bucket is located in.
-* docker_version: [DOCKER_VERSION](#docker_version)
+* `REGION`: the region in AWS that the s3 bucket is located in.
+* `docker_version`: [DOCKER_VERSION](#docker_version)
 
 ### Build it
 
@@ -87,14 +87,14 @@ backs up $JENKINS_HOME to a s3 bucket of your choosing.
 #### Requirements:
 * Create a [s3 bucket](http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html) in AWS for the purposes of storing backups.
 
-* Override the $ROOT_BUCKET environment variable with your s3 buckets name
+* Override the `$ROOT_BUCKET` environment variable with your s3 buckets name
 
-* Override the $PRODUCT environment variable with the product/project name you
+* Override the `$PRODUCT` environment variable with the product/project name you
   are managing. This value allows for multiple jenkins to be backed up to the
   same location. *We prefer to have distinct jenkins for each project rather
   than one global jenkins.*
 
-* Override the $REGION environment variable with the region of the s3 bucket of
+* Override the `$REGION` environment variable with the region of the s3 bucket of
   your choosing.
 
 * The container will need to have the permissions to write to the s3 bucket of
@@ -107,7 +107,7 @@ The image upon launch will attempt to restore itself based on where the jenkins
 backups are being archived in s3. It will check by default in:
 
 ```bash
-s3://$ROOT__BUCKET/$PRODUCT/
+s3://$ROOT_BUCKET/$PRODUCT/
 ```
 #### Requirements:
 * See above about overriding environment variables for backups.

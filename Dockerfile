@@ -8,12 +8,12 @@
 # * http://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci
 ###############################################################################
 
-FROM jenkinsci/jenkins:2.84
+FROM jenkinsci/jenkins:2.117
 MAINTAINER the internet
 
 ENV PRODUCT test
 ENV ROOT_BUCKET backups
-ENV REGION us-west-1
+ENV REGION us-east-1
 ENV docker_version 17.06.0
 
 # Install necessary packages

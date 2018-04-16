@@ -22,20 +22,21 @@ ADD ./git-lfs_1.4.4_amd64.deb /git-lfs_1.4.4_amd64.deb
 RUN apt-get update &&\
     apt-get upgrade -y -o DPkg::Options::=--force-confold &&\
     apt-get install -qq -y --no-install-recommends --no-install-suggests \
-	                apt-transport-https \
+                    apt-transport-https \
                     ca-certificates \
                     gnupg2 \
                     software-properties-common \
                     git \
-	                sudo &&\
+                    zip \
+                    sudo &&\
     dpkg -i /git-lfs_1.4.4_amd64.deb &&\
     apt-get install -f &&\
-	curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - &&\
+    curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - &&\
     add-apt-repository \
     "deb [arch=amd64] https://download.docker.com/linux/debian \
     $(lsb_release -cs) \
     stable" &&\
-	apt-get update &&\
+    apt-get update &&\
     apt-get -y install docker-ce=${docker_version}~ce-0~debian &&\
     apt-get install -y python-pip python-virtualenv &&\
     apt-get clean &&\

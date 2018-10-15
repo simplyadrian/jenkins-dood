@@ -8,13 +8,13 @@
 # * http://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci
 ###############################################################################
 
-FROM jenkinsci/jenkins:2.118
+FROM jenkins/jenkins:2.146
 MAINTAINER the internet
 
 ENV PRODUCT test
 ENV ROOT_BUCKET backups
 ENV REGION us-east-1
-ENV docker_version 18.03.0
+ENV docker_version 18.06.1
 
 # Install necessary packages
 USER root
@@ -37,7 +37,7 @@ RUN apt-get update &&\
     $(lsb_release -cs) \
     stable" &&\
     apt-get update &&\
-    apt-get -y install docker-ce=${docker_version}~ce-0~debian &&\
+    apt-get -y install docker-ce=${docker_version}~ce~3-0~debian &&\
     apt-get install -y python-pip python-virtualenv &&\
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*

@@ -8,7 +8,7 @@
 # * http://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci
 ###############################################################################
 
-FROM jenkins/jenkins:2.149
+FROM jenkins/jenkins:2.151
 MAINTAINER the internet
 
 ENV PRODUCT test

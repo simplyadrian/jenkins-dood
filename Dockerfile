@@ -8,7 +8,7 @@
 # * http://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci
 ###############################################################################
 
-FROM jenkins/jenkins:2.157
+FROM jenkins/jenkins:2.158
 MAINTAINER the internet
 
 ENV PRODUCT test
@@ -40,10 +40,12 @@ RUN apt-get update &&\
     apt-get update &&\
     apt-get install -qq -y --no-install-recommends --no-install-suggests \
 		    docker-ce=${docker_version}~ce~3-0~debian \
-		    python-pip
+		    python-pip \
 		    python-virtualenv \
-		    ansible \
-		    terraform &&\
+		    ansible &&\
+    curl -fsSL -o terraform.zip https://releases.hashicorp.com/terraform/0.11.11/terraform_0.11.11_linux_amd64.zip &&\
+    unzip terraform.zip -d /usr/local/bin/ &&\
+    chmod +x /usr/local/bin/terraform &&\
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
 

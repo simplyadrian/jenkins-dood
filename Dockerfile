@@ -38,8 +38,12 @@ RUN apt-get update &&\
     $(lsb_release -cs) \
     stable" &&\
     apt-get update &&\
-    apt-get -y install docker-ce=${docker_version}~ce~3-0~debian &&\
-    apt-get install -y python-pip python-virtualenv &&\
+    apt-get install -qq -y --no-install-recommends --no-install-suggests \
+		    docker-ce=${docker_version}~ce~3-0~debian \
+		    python-pip
+		    python-virtualenv \
+		    ansible \
+		    terraform &&\
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
 

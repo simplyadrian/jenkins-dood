@@ -8,13 +8,13 @@
 # * http://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci
 ###############################################################################
 
-FROM jenkinsci/jenkins:2.117
+FROM jenkins/jenkins:2.158
 MAINTAINER the internet
 
 ENV PRODUCT test
 ENV ROOT_BUCKET backups
 ENV REGION us-east-1
-ENV docker_version 17.06.0
+ENV docker_version 18.06.1
 
 # Install necessary packages
 USER root
@@ -28,7 +28,8 @@ RUN apt-get update &&\
                     software-properties-common \
                     git \
                     zip \
-                    sudo &&\
+                    sudo \
+		    packer &&\
     dpkg -i /git-lfs_1.4.4_amd64.deb &&\
     apt-get install -f &&\
     curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - &&\
@@ -37,8 +38,14 @@ RUN apt-get update &&\
     $(lsb_release -cs) \
     stable" &&\
     apt-get update &&\
-    apt-get -y install docker-ce=${docker_version}~ce-0~debian &&\
-    apt-get install -y python-pip python-virtualenv &&\
+    apt-get install -qq -y --no-install-recommends --no-install-suggests \
+		    docker-ce=${docker_version}~ce~3-0~debian \
+		    python-pip \
+		    python-virtualenv \
+		    ansible &&\
+    curl -fsSL -o terraform.zip https://releases.hashicorp.com/terraform/0.11.11/terraform_0.11.11_linux_amd64.zip &&\
+    unzip terraform.zip -d /usr/local/bin/ &&\
+    chmod +x /usr/local/bin/terraform &&\
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/*
 

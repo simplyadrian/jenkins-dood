@@ -43,7 +43,7 @@ RUN apt-get update &&\
 		    python-pip \
 		    python-virtualenv \
 		    ansible &&\
-    curl -fsSL -o terraform.zip https://releases.hashicorp.com/terraform/0.11.11/terraform_0.11.11_linux_amd64.zip &&\
+    curl -fsSL -o terraform.zip https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip &&\
     unzip terraform.zip -d /usr/local/bin/ &&\
     chmod +x /usr/local/bin/terraform &&\
     apt-get clean &&\

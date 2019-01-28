@@ -50,7 +50,7 @@ RUN apt-get update &&\
     rm -rf /var/lib/apt/lists/*
 
 # install awscli
-RUN pip install awscli
+RUN pip install awscli boto3
 
 # restore job
 ADD restore.sh /restore.sh

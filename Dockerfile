@@ -29,7 +29,8 @@ RUN apt-get update &&\
                     git \
                     zip \
                     sudo \
-		    packer &&\
+		    packer \
+		    make &&\
     dpkg -i /git-lfs_1.4.4_amd64.deb &&\
     apt-get install -f &&\
     curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - &&\
